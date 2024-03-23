@@ -1,0 +1,64 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "IOT Restful API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/hello": {
+      "get": {
+        "description": "Trả về chuỗi 'Hello World'",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/sensor-data": {
+      "get": {
+        "description": "Lấy dữ liệu từ module SensorData",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SensorData"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SensorData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "temperature": {
+          "type": "number",
+          "format": "float"
+        },
+        "humidity": {
+          "type": "number",
+          "format": "float"
+        },
+        "light": {
+          "type": "number",
+          "format": "float"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
