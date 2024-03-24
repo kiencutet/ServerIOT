@@ -1,33 +1,562 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-    "title": "IOT Restful API",
+    "title": "Swagger API",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
   "paths": {
-    "/hello": {
+    "/datasensor/all": {
       "get": {
+        "tags": ["datasensor"],
         "description": "Trả về chuỗi 'Hello World'",
         "responses": {
           "200": {
             "description": "Successful response",
-            "schema": {
-              "type": "string"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "temperature": {
+                        "type": "number"
+                      },
+                      "humidity": {
+                        "type": "number"
+                      },
+                      "light": {
+                        "type": "number"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
     },
-    "/sensor-data": {
+    "/datasensor/id/{id}": {
       "get": {
-        "description": "Lấy dữ liệu từ module SensorData",
+        "tags": ["datasensor"],
+        "description": "Lấy dữ liệu từ model SensorData dựa trên ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của dữ liệu cần lấy",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "temperature": {
+                      "type": "number"
+                    },
+                    "humidity": {
+                      "type": "number"
+                    },
+                    "light": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/datasensor/create": {
+      "post": {
+        "tags": ["datasensor"],
+        "description": "Tạo mới datasensor",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "temperature": {
+                    "type": "number"
+                  },
+                  "humidity": {
+                    "type": "number"
+                  },
+                  "light": {
+                    "type": "number"
+                  }
+                },
+                "required": ["temperature", "humidity", "light"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "temperature": {
+                      "type": "number"
+                    },
+                    "humidity": {
+                      "type": "number"
+                    },
+                    "light": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/datasensor/update/{id}": {
+      "put": {
+        "tags": ["datasensor"],
+        "description": "Cập nhật datasensor theo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của datasensor cần cập nhật",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "temperature": {
+                    "type": "number"
+                  },
+                  "humidity": {
+                    "type": "number"
+                  },
+                  "light": {
+                    "type": "number"
+                  }
+                },
+                "required": ["temperature", "humidity", "light"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "temperature": {
+                      "type": "number"
+                    },
+                    "humidity": {
+                      "type": "number"
+                    },
+                    "light": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/datasensor/delete/{id}": {
+      "delete": {
+        "tags": ["datasensor"],
+        "description": "Xóa datasensor theo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của datasensor cần xóa",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "404": {
+            "description": "Data sensor not found"
+          }
+        }
+      }
+    },
+    "/datasensor/sort": {
+      "get": {
+        "tags": ["datasensor"],
+        "description": "Lấy dữ liệu từ module SensorData",
+        "parameters": [
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Cách sắp xếp dữ liệu",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/SensorData"
+                "type": "string",
+                "enum": [
+                  "temperature_ASC",
+                  "temperature_DESC",
+                  "humidity_ASC",
+                  "humidity_DESC",
+                  "light_ASC",
+                  "light_DESC"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "temperature": {
+                      "type": "number"
+                    },
+                    "humidity": {
+                      "type": "number"
+                    },
+                    "light": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actionhistory/all": {
+      "get": {
+        "tags": ["actionhistory"],
+        "description": "Trả về toàn bộ lịch sử hoạt động",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "deviceName": {
+                        "type": "string"
+                      },
+                      "action": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actionhistory/id/{id}": {
+      "get": {
+        "tags": ["actionhistory"],
+        "description": "Lấy dữ liệu từ lịch sử hoạt động dựa trên ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của dữ liệu cần lấy",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "deviceName": {
+                      "type": "string"
+                    },
+                    "action": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actionhistory/create": {
+      "post": {
+        "tags": ["actionhistory"],
+        "description": "Tạo mới lịch sử hoạt động",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceName": {
+                    "type": "string"
+                  },
+                  "action": {
+                    "type": "integer"
+                  }
+                },
+                "required": ["deviceName", "action"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "deviceName": {
+                      "type": "string"
+                    },
+                    "action": {
+                      "type": "integer"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actionhistory/update/{id}": {
+      "put": {
+        "tags": ["actionhistory"],
+        "description": "Cập nhật lịch sử hoạt động theo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của lịch sử hoạt động cần cập nhật",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceName": {
+                    "type": "string"
+                  },
+                  "action": {
+                    "type": "integer"
+                  }
+                },
+                "required": ["deviceName", "action"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "404": {
+            "description": "Action history not found"
+          }
+        }
+      }
+    },
+    "/actionhistory/delete/{id}": {
+      "delete": {
+        "tags": ["actionhistory"],
+        "description": "Xóa lịch sử hoạt động theo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của lịch sử hoạt động cần xóa",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "404": {
+            "description": "Action history not found"
+          }
+        }
+      }
+    },
+    "/actionhistory/sort": {
+      "get": {
+        "tags": ["actionhistory"],
+        "description": "Lấy lịch sử hoạt động và sắp xếp theo các trường được chỉ định",
+        "parameters": [
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Cách sắp xếp dữ liệu",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "deviceName_ASC",
+                  "deviceName_DESC",
+                  "action_ASC",
+                  "action_DESC",
+                  "createdAt_ASC",
+                  "createdAt_DESC"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "deviceName": {
+                        "type": "string"
+                      },
+                      "action": {
+                        "type": "integer"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -35,30 +564,6 @@
       }
     }
   },
-  "definitions": {
-    "SensorData": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "temperature": {
-          "type": "number",
-          "format": "float"
-        },
-        "humidity": {
-          "type": "number",
-          "format": "float"
-        },
-        "light": {
-          "type": "number",
-          "format": "float"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    }
-  }
+
+  "definitions": {}
 }
