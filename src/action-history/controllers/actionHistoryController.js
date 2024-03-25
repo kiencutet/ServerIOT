@@ -85,6 +85,44 @@ class actionHistoryController {
     }
   }
 
+  async updateStatus(req, res, next) {
+    try {
+      // Lấy đủ dữ liệu từ yêu cầu
+      const { id } = req.params;
+      const { action } = req.body;
+
+      // Kiểm tra xem action history có tồn tại không
+      const ActionHistory = await actionHistoryModel();
+      const existingActionHistory = await ActionHistory.findByPk(id);
+      if (!existingActionHistory) {
+        return res.status(404).json({ error: 'Action history not found' });
+      }
+
+      if (action !== 0 && action !== 1) {
+        return res
+          .status(400)
+          .json({ error: 'Invalid action value. Action must be 0 or 1' });
+      }
+
+      // Cập nhật dữ liệu
+      existingActionHistory.action = action;
+      await existingActionHistory.save();
+
+      // Tạo chuỗi trả về dựa trên giá trị action
+      let responseMessage = '';
+      if (action === 1) {
+        responseMessage = `Device status id ${id} is on`;
+      } else {
+        responseMessage = `Device status ${id} is off`;
+      }
+
+      // Trả về dữ liệu đã cập nhật dưới dạng JSON
+      res.json({ message: responseMessage });
+    } catch (error) {
+      next(error); // Chuyển tiếp lỗi nếu có
+    }
+  }
+
   async delete(req, res, next) {
     try {
       // Lấy id từ yêu cầu

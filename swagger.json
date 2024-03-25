@@ -9,17 +9,176 @@
       "url": "http://localhost:3000"
     }
   ],
+  "components": {
+    "schemas": {
+      "SensorData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "primaryKey": true
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "humidity": {
+            "type": "number"
+          },
+          "light": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "createSensorData": {
+        "type": "object",
+        "properties": {
+          "temperature": {
+            "type": "number"
+          },
+          "humidity": {
+            "type": "number"
+          },
+          "light": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ActionHistory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "primaryKey": true
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "action": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "createActionHistory": {
+        "type": "object",
+        "properties": {
+          "deviceName": {
+            "type": "string"
+          },
+          "action": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
   "paths": {
-    "/datasensor/all": {
+    "/dashboard/all": {
       "get": {
-        "tags": ["datasensor"],
-        "description": "Trả về chuỗi 'Hello World'",
+        "tags": ["dashboard"],
+        "description": "Get all the data of the dashboard",
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "interger"
+                      },
+                      "temperature": {
+                        "type": "number"
+                      },
+                      "humidity": {
+                        "type": "number"
+                      },
+                      "light": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/id/{id}": {
+      "get": {
+        "tags": ["dashboard"],
+        "description": "Get DashBoard data based on ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the data to be retrieved",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "temperature": {
+                      "type": "number"
+                    },
+                    "humidity": {
+                      "type": "number"
+                    },
+                    "light": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/datasensor/all": {
+      "get": {
+        "tags": ["datasensor"],
+        "description": "Get all the data of the data sensor",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SensorData",
                   "type": "array",
                   "items": {
                     "type": "object",
@@ -52,12 +211,12 @@
     "/datasensor/id/{id}": {
       "get": {
         "tags": ["datasensor"],
-        "description": "Lấy dữ liệu từ model SensorData dựa trên ID",
+        "description": "Get SensorData data based on ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID của dữ liệu cần lấy",
+            "description": "ID of the data to be retrieved",
             "required": true,
             "schema": {
               "type": "integer"
@@ -99,7 +258,7 @@
     "/datasensor/create": {
       "post": {
         "tags": ["datasensor"],
-        "description": "Tạo mới datasensor",
+        "description": "Create new datasensor",
         "requestBody": {
           "required": true,
           "content": {
@@ -157,12 +316,12 @@
     "/datasensor/update/{id}": {
       "put": {
         "tags": ["datasensor"],
-        "description": "Cập nhật datasensor theo ID",
+        "description": "Update datasensor by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID của datasensor cần cập nhật",
+            "description": "The ID of the datasensor needs updating",
             "required": true,
             "schema": {
               "type": "integer"
@@ -226,12 +385,12 @@
     "/datasensor/delete/{id}": {
       "delete": {
         "tags": ["datasensor"],
-        "description": "Xóa datasensor theo ID",
+        "description": "Delete datasensor by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID của datasensor cần xóa",
+            "description": "ID of the datasensor to be deleted",
             "required": true,
             "schema": {
               "type": "integer"
@@ -251,24 +410,17 @@
     "/datasensor/sort": {
       "get": {
         "tags": ["datasensor"],
-        "description": "Lấy dữ liệu từ module SensorData",
+        "description": "Sort SensorData data",
         "parameters": [
           {
             "name": "sort",
             "in": "query",
-            "description": "Cách sắp xếp dữ liệu",
+            "description": "How to sort data",
             "schema": {
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "temperature_ASC",
-                  "temperature_DESC",
-                  "humidity_ASC",
-                  "humidity_DESC",
-                  "light_ASC",
-                  "light_DESC"
-                ]
+                "enum": ["temperature_ASC", "temperature_DESC", "humidity_ASC", "humidity_DESC", "light_ASC", "light_DESC"]
               }
             }
           }
@@ -308,7 +460,7 @@
     "/actionhistory/all": {
       "get": {
         "tags": ["actionhistory"],
-        "description": "Trả về toàn bộ lịch sử hoạt động",
+        "description": "Returns the entire action history",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -344,12 +496,12 @@
     "/actionhistory/id/{id}": {
       "get": {
         "tags": ["actionhistory"],
-        "description": "Lấy dữ liệu từ lịch sử hoạt động dựa trên ID",
+        "description": "Get data from action history based on ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID của dữ liệu cần lấy",
+            "description": "ID of the data to retrieve",
             "required": true,
             "schema": {
               "type": "integer"
@@ -388,7 +540,7 @@
     "/actionhistory/create": {
       "post": {
         "tags": ["actionhistory"],
-        "description": "Tạo mới lịch sử hoạt động",
+        "description": "Create new action history",
         "requestBody": {
           "required": true,
           "content": {
@@ -440,12 +592,12 @@
     "/actionhistory/update/{id}": {
       "put": {
         "tags": ["actionhistory"],
-        "description": "Cập nhật lịch sử hoạt động theo ID",
+        "description": "Update action history by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID của lịch sử hoạt động cần cập nhật",
+            "description": "ID of the activity history to update",
             "required": true,
             "schema": {
               "type": "integer"
@@ -481,15 +633,59 @@
         }
       }
     },
-    "/actionhistory/delete/{id}": {
-      "delete": {
+    "/actionhistory/updatestatus/{id}": {
+      "patch": {
         "tags": ["actionhistory"],
-        "description": "Xóa lịch sử hoạt động theo ID",
+        "description": "Update device status by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID của lịch sử hoạt động cần xóa",
+            "description": "ID of the device to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "integer"
+                  }
+                },
+                "required": ["action"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "404": {
+            "description": "Action history not found"
+          },
+          "400": {
+            "description": "Invalid action value"
+          }
+        }
+      }
+    },
+    "/actionhistory/delete/{id}": {
+      "delete": {
+        "tags": ["actionhistory"],
+        "description": "Delete action history by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the action history to delete",
             "required": true,
             "schema": {
               "type": "integer"
@@ -509,24 +705,17 @@
     "/actionhistory/sort": {
       "get": {
         "tags": ["actionhistory"],
-        "description": "Lấy lịch sử hoạt động và sắp xếp theo các trường được chỉ định",
+        "description": "Get action history and sort by specified fields",
         "parameters": [
           {
             "name": "sort",
             "in": "query",
-            "description": "Cách sắp xếp dữ liệu",
+            "description": "How to sort data",
             "schema": {
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "deviceName_ASC",
-                  "deviceName_DESC",
-                  "action_ASC",
-                  "action_DESC",
-                  "createdAt_ASC",
-                  "createdAt_DESC"
-                ]
+                "enum": ["deviceName_ASC", "deviceName_DESC", "action_ASC", "action_DESC", "createdAt_ASC", "createdAt_DESC"]
               }
             }
           }
